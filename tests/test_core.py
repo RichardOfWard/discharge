@@ -5,6 +5,8 @@ from discharge.exceptions import FileExists
 
 class TestCore(Test):
 
+    site_path = 'test_core_site'
+
     def test_site(self):
         assert self.site
 
