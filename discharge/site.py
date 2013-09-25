@@ -1,5 +1,7 @@
 import os
 
+from .builder import Builder
+
 
 class Site(object):
 
@@ -8,9 +10,10 @@ class Site(object):
         self.plugins = []
 
     def build(self, out_path):
+        builder = Builder(self, out_path)
         os.mkdir(out_path)
         for plugin in self.plugins:
-            plugin.build(self, out_path)
+            plugin.build(builder, out_path)
 
     def register_plugin(self, plugin):
         self.plugins.append(plugin)
