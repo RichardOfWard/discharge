@@ -9,7 +9,7 @@ class Test(object):
     def setup(self):
         self.site_path = os.path.join(
             os.path.dirname(__file__),
-            self.site_path,
+            self.site_dir,
         )
         self.build_path_container = tempfile.mkdtemp()
         self.build_path = self.build_path_container + '/build'
