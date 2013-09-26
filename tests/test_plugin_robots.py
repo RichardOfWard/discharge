@@ -1,4 +1,3 @@
-import os
 from .base import Test
 from discharge.plugins.robots import RobotsPlugin
 
@@ -10,7 +9,7 @@ class TestRobotsWithout(Test):
     def test_robots_file(self):
         robots_plugin = RobotsPlugin()
         self.site.register_plugin(robots_plugin)
-        self.site.build(self.build_path)
+        self.builder.build(self.build_path)
         with open(self.build_path + '/robots.txt') as f:
             assert f.read() == "User-agent: *"
 
@@ -22,7 +21,7 @@ class TestRobotsWith(Test):
     def test_robots_file(self):
         robots_plugin = RobotsPlugin()
         self.site.register_plugin(robots_plugin)
-        self.site.build(self.build_path)
+        self.builder.build(self.build_path)
         with open(self.build_path + '/robots.txt') as f1:
             with open(self.site_path + '/robots.txt') as f2:
                 assert f1.read() == f2.read()

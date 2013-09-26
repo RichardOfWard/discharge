@@ -3,6 +3,7 @@ import tempfile
 import shutil
 
 from discharge.site import Site
+from discharge.builder import Builder
 
 
 class Test(object):
@@ -14,6 +15,7 @@ class Test(object):
         self.build_path_container = tempfile.mkdtemp()
         self.build_path = self.build_path_container + '/build'
         self.site = Site(self.site_path)
+        self.builder = Builder(self.site, self.build_path)
 
     def teardown(self):
         shutil.rmtree(self.build_path_container)

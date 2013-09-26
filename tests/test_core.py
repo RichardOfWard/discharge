@@ -10,7 +10,7 @@ class TestCoreCopying(Test):
 
     def setup(self):
         super(TestCoreCopying, self).setup()
-        self.site.build(self.build_path)
+        self.builder.build(self.build_path)
 
     def test_build_path(self):
         assert os.path.isdir(self.build_path)
