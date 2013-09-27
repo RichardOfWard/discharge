@@ -43,7 +43,6 @@ class TestCoreCopying(Test):
         assert not os.path.exists(self.build_path + '/_hiddendir')
 
     def test_not_copied_dot_hiddendir(self):
-        print self.site_path + '/.hiddendir'
         assert os.path.exists(self.site_path + '/.hiddendir')
         assert not os.path.exists(self.build_path + '/.hiddendir')
 

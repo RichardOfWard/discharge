@@ -12,9 +12,11 @@ class TemplatesPlugin(Plugin):
         env = Environment(loader=loader)
         template = env.get_template(path)
         with builder.open(path) as f:
-            print path
-            print template.render()
-            f.write(template.render())
+            f.write(
+                template.render(
+                    file=path
+                )
+            )
 
     def build_misc(self, builder):
         pass
