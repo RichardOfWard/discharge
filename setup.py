@@ -9,6 +9,6 @@ setup(
     description='A modular static site generator',
     packages=find_packages(exclude=['tests']),
     test_suite='nose.collector',
-    setup_requires=['Jinja2'],
+    install_requires=['Jinja2'],
     tests_require=['nose'],
 )

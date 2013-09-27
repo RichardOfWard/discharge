@@ -10,6 +10,7 @@ class Builder(object):
         self.out_path = out_path
 
     def open(self, path, mode='wb', buffering=-1):
+        print path, self.out_path
         path = os.path.join(self.out_path, path)
         if os.path.exists(path):
             raise FileExists("File %s already exists" % path)
@@ -58,7 +59,7 @@ class Builder(object):
                     src_file_path = os.path.join(self.site.location, file_path)
                     dst_file_path = os.path.join(self.out_path, file_path)
                     with open(src_file_path, 'rb') as src_file:
-                        with self.open(dst_file_path) as dst_file:
+                        with self.open(file_path) as dst_file:
                             shutil.copyfileobj(src_file, dst_file)
 
         for plugin in self.site.plugins:
