@@ -9,7 +9,13 @@ class TemplatesPlugin(Plugin):
 
     def build_file(self, builder, path):
         loader = FileSystemLoader(builder.site.location)
-        env = Environment(loader=loader)
+        env = Environment(
+            loader=loader,
+            autoescape=True,
+            extensions=[
+                'jinja2.ext.autoescape',
+            ]
+        )
         template = env.get_template(path)
         with builder.open(path) as f:
             f.write(

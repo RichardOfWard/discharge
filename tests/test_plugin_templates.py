@@ -23,3 +23,7 @@ class TestTemplatesPlugin(Test):
     def test_var_file(self):
         with open(self.build_path + '/test_var_file.html') as f:
             assert f.read().strip() == 'test_var_file.html'
+
+    def test_excaping(self):
+        with open(self.build_path + '/test_escaping.html') as f:
+            assert f.read().strip() == '&lt;b&gt;HI&lt;/b&gt;'
