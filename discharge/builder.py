@@ -26,11 +26,11 @@ class Builder(object):
 
             hidden_dirnames = list(
                 name for name in dirnames
-                if name.startswith('_')
+                if name.startswith('_') or name.startswith('.')
             )
             hidden_filenames = list(
                 name for name in filenames
-                if name.startswith('_')
+                if name.startswith('_') or name.startswith('.')
             )
 
             for name in hidden_dirnames:
