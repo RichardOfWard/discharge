@@ -9,6 +9,7 @@ class Test(object):
     def setup(self):
         self.source_path = os.path.join(
             os.path.dirname(__file__),
+            'sites/',
             self.source_dir,
         )
         self.build_path_container = tempfile.mkdtemp()

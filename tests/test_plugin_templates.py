@@ -6,7 +6,7 @@ from discharge.site import Site
 
 class TestTemplatesPlugin(Test):
 
-    source_dir = 'test_templates_site'
+    source_dir = 'test_plugin_templates'
 
     def setup(self):
         super(TestTemplatesPlugin, self).setup()
@@ -46,7 +46,7 @@ class TestTemplatesPlugin(Test):
 
 class TestTemplatesPlugin2(Test):
 
-    source_dir = 'test_templates_site'
+    source_dir = 'test_plugin_templates'
 
     def setup(self):
         super(TestTemplatesPlugin2, self).setup()

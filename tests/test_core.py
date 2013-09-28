@@ -14,7 +14,7 @@ class EagerPlugin(Plugin):
 
 class TestCoreCopying(Test):
 
-    source_dir = 'test_core_site'
+    source_dir = 'test_core'
 
     def setup(self):
         super(TestCoreCopying, self).setup()
@@ -63,7 +63,7 @@ class TestCoreCopying(Test):
 
 class TestCore(Test):
 
-    source_dir = 'test_core_site'
+    source_dir = 'test_core'
 
     def test_default_build_dir(self):
         site = Site(self.source_path)

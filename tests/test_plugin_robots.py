@@ -4,7 +4,7 @@ from discharge.plugins.robots import RobotsPlugin
 
 class TestRobotsWithout(Test):
 
-    source_dir = 'test_robots_without_site'
+    source_dir = 'test_plugin_robots_without'
 
     def test_robots_file(self):
         robots_plugin = RobotsPlugin()
@@ -16,7 +16,7 @@ class TestRobotsWithout(Test):
 
 class TestRobotsWith(Test):
 
-    source_dir = 'test_robots_with_site'
+    source_dir = 'test_plugin_robots_with'
 
     def test_robots_file(self):
         robots_plugin = RobotsPlugin()
