@@ -1,4 +1,5 @@
-from jinja2 import Environment, FileSystemLoader
+import jinja2
+
 from .plugin import Plugin
 
 
@@ -8,14 +9,15 @@ class TemplatesPlugin(Plugin):
         return path.endswith('.html')
 
     def build_file(self, site, path):
-        loader = FileSystemLoader(site.source_path)
-        env = Environment(
+        loader = jinja2.FileSystemLoader(site.source_path)
+        env = jinja2.Environment(
             loader=loader,
             autoescape=True,
+            undefined=jinja2.StrictUndefined,
             extensions=[
                 'jinja2.ext.autoescape',
                 'jinja2_highlight.HighlightExtension',
-            ]
+            ],
         )
         template = env.get_template(path)
         with site.output_file(path) as f:

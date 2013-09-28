@@ -1,7 +1,9 @@
-from .base import Test
-from discharge.plugins.templates import TemplatesPlugin
+from jinja2.exceptions import UndefinedError
 
+from discharge.plugins.templates import TemplatesPlugin
 from discharge.site import Site
+
+from .base import Test
 
 
 class TestTemplatesPlugin(Test):
@@ -43,13 +45,12 @@ class TestTemplatesPlugin(Test):
             )
 
 
-
-class TestTemplatesPlugin2(Test):
+class TestTemplatesPluginBasePath(Test):
 
     source_dir = 'test_plugin_templates'
 
     def setup(self):
-        super(TestTemplatesPlugin2, self).setup()
+        super(TestTemplatesPluginBasePath, self).setup()
         self.site = Site(self.source_path, self.build_path, '/foo')
         templates_plugin = TemplatesPlugin()
         self.site.register_plugin(templates_plugin)
@@ -58,3 +59,22 @@ class TestTemplatesPlugin2(Test):
     def test_var_base_path(self):
         with open(self.build_path + '/test_var_base_path.html') as f:
             assert f.read().strip() == '/foo'
+
+
+class TestTemplatesPluginUndefined(Test):
+
+    source_dir = 'test_plugin_templates_undefined'
+
+    def setup(self):
+        super(TestTemplatesPluginUndefined, self).setup()
+        self.site = Site(self.source_path, self.build_path, '/foo')
+        templates_plugin = TemplatesPlugin()
+        self.site.register_plugin(templates_plugin)
+
+    def test_undefined(self):
+        try:
+            self.site.build()
+        except UndefinedError:
+            pass
+        else:
+            assert False, "Undefined variable raised no exception"
