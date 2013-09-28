@@ -34,6 +34,15 @@ class TestTemplatesPlugin(Test):
         with open(self.build_path + '/test_var_base_path.html') as f:
             assert f.read().strip() == '/'
 
+    def test_pygments(self):
+        with open(self.build_path + '/test_pygments.html') as f:
+            assert f.read().strip() == (
+                """<div class="highlight"><pre><span class="kn">import"""
+                """</span> <span class="nn">love</span>\n"""
+                """</pre></div>"""
+            )
+
+
 
 class TestTemplatesPlugin2(Test):
 

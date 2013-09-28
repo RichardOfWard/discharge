@@ -14,6 +14,7 @@ class TemplatesPlugin(Plugin):
             autoescape=True,
             extensions=[
                 'jinja2.ext.autoescape',
+                'jinja2_highlight.HighlightExtension',
             ]
         )
         template = env.get_template(path)
