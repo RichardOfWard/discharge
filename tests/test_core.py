@@ -1,7 +1,10 @@
 import os
-from .base import Test
+
+from discharge.site import Site
 from discharge.exceptions import FileExists, DuplicateHandlers
 from discharge.plugins.plugin import Plugin
+
+from .base import Test
 
 
 class EagerPlugin(Plugin):
@@ -61,6 +64,10 @@ class TestCoreCopying(Test):
 class TestCore(Test):
 
     source_dir = 'test_core_site'
+
+    def test_default_build_dir(self):
+        site = Site(self.source_path)
+        assert site.build_path == self.source_path + '/_build'
 
     def test_output_file_checking(self):
         os.mkdir(self.build_path)
