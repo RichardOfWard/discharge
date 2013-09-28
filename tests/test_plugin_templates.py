@@ -4,13 +4,13 @@ from discharge.plugins.templates import TemplatesPlugin
 
 class TestTemplatesPlugin(Test):
 
-    site_dir = 'test_templates_site'
+    source_dir = 'test_templates_site'
 
     def setup(self):
         super(TestTemplatesPlugin, self).setup()
         templates_plugin = TemplatesPlugin()
         self.site.register_plugin(templates_plugin)
-        self.builder.build()
+        self.site.build()
 
     def test_non_template(self):
         with open(self.build_path + '/test.txt') as f:

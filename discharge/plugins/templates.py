@@ -4,11 +4,11 @@ from .plugin import Plugin
 
 class TemplatesPlugin(Plugin):
 
-    def can_handle_file(self, builder, path):
+    def can_handle_file(self, site, path):
         return path.endswith('.html')
 
-    def build_file(self, builder, path):
-        loader = FileSystemLoader(builder.site.location)
+    def build_file(self, site, path):
+        loader = FileSystemLoader(site.source_path)
         env = Environment(
             loader=loader,
             autoescape=True,
@@ -17,12 +17,12 @@ class TemplatesPlugin(Plugin):
             ]
         )
         template = env.get_template(path)
-        with builder.open(path) as f:
+        with site.output_file(path) as f:
             f.write(
                 template.render(
                     file=path
                 )
             )
 
-    def build_misc(self, builder):
+    def build_misc(self, site):
         pass

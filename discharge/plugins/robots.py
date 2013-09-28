@@ -3,9 +3,9 @@ from ..exceptions import FileExists
 
 
 class RobotsPlugin(Plugin):
-    def build_misc(self, builder):
+    def build_misc(self, site):
         try:
-            with builder.open('robots.txt', 'wb') as f:
+            with site.output_file('robots.txt', 'wb') as f:
                 f.write("User-agent: *")
         except FileExists:
             pass
