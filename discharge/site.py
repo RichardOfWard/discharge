@@ -6,7 +6,7 @@ from .exceptions import FileExists, DuplicateHandlers
 
 class Site(object):
 
-    def __init__(self, source_path, build_path=None, base_path='/'):
+    def __init__(self, source_path, build_path=None, base_path=''):
         if build_path is None:
             build_path = os.path.join(source_path, '_build')
 

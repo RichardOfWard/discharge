@@ -28,11 +28,11 @@ class TestTemplatesPlugin(Test):
 
     def test_var_file(self):
         with open(self.build_path + '/test_var_file.html') as f:
-            assert f.read().strip() == 'test_var_file.html'
+            assert f.read().strip() == '/test_var_file.html'
 
     def test_var_base_path(self):
         with open(self.build_path + '/test_var_base_path.html') as f:
-            assert f.read().strip() == '/'
+            assert f.read().strip() == ''
 
     def test_pygments(self):
         with open(self.build_path + '/test_pygments.html') as f:
@@ -50,11 +50,11 @@ class TestTemplatesPlugin2(Test):
 
     def setup(self):
         super(TestTemplatesPlugin2, self).setup()
-        self.site = Site(self.source_path, self.build_path, '/foo/')
+        self.site = Site(self.source_path, self.build_path, '/foo')
         templates_plugin = TemplatesPlugin()
         self.site.register_plugin(templates_plugin)
         self.site.build()
 
     def test_var_base_path(self):
         with open(self.build_path + '/test_var_base_path.html') as f:
-            assert f.read().strip() == '/foo/'
+            assert f.read().strip() == '/foo'
