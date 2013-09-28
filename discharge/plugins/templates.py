@@ -20,7 +20,8 @@ class TemplatesPlugin(Plugin):
         with site.output_file(path) as f:
             f.write(
                 template.render(
-                    file=path
+                    file=path,
+                    base_path=site.base_path
                 )
             )
 

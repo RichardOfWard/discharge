@@ -6,9 +6,10 @@ from .exceptions import FileExists, DuplicateHandlers
 
 class Site(object):
 
-    def __init__(self, source_path, build_path):
+    def __init__(self, source_path, build_path, base_path='/'):
         self.source_path = source_path
         self.build_path = build_path
+        self.base_path = base_path
         self.plugins = []
 
     def register_plugin(self, plugin):
