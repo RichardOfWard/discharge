@@ -12,7 +12,7 @@ class TestCmd(object):
                              stderr=subprocess.PIPE)
         assert p.wait() != 0
 
-    def test_no_command(self):
+    def test_bad_command(self):
         p = subprocess.Popen(['discharge', 'nosuchcommand'],
                              cwd=self.source_path,
                              stdout=subprocess.PIPE,

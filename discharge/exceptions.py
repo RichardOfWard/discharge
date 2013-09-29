@@ -3,3 +3,6 @@ class FileExists(Exception):
 
 class DuplicateHandlers(Exception):
     pass
+
+class UsageError(Exception):
+    pass
