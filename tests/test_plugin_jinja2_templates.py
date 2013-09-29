@@ -12,8 +12,8 @@ class TestTemplatesPlugin(Test):
 
     def setup(self):
         super(TestTemplatesPlugin, self).setup()
-        templates_plugin = Jinja2TemplatesPlugin()
-        self.site.add_plugin(templates_plugin)
+        self.templates_plugin = Jinja2TemplatesPlugin()
+        self.site.add_plugin(self.templates_plugin)
         self.site.build()
 
     def test_non_template(self):
