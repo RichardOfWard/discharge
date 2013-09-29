@@ -13,7 +13,7 @@ class TestTemplatesPlugin(Test):
     def setup(self):
         super(TestTemplatesPlugin, self).setup()
         templates_plugin = TemplatesPlugin()
-        self.site.register_plugin(templates_plugin)
+        self.site.add_plugin(templates_plugin)
         self.site.build()
 
     def test_non_template(self):
@@ -53,7 +53,7 @@ class TestTemplatesPluginBasePath(Test):
         super(TestTemplatesPluginBasePath, self).setup()
         self.site = Site(self.source_path, self.build_path, '/foo')
         templates_plugin = TemplatesPlugin()
-        self.site.register_plugin(templates_plugin)
+        self.site.add_plugin(templates_plugin)
         self.site.build()
 
     def test_var_base_path(self):
@@ -69,7 +69,7 @@ class TestTemplatesPluginUndefined(Test):
         super(TestTemplatesPluginUndefined, self).setup()
         self.site = Site(self.source_path, self.build_path, '/foo')
         templates_plugin = TemplatesPlugin()
-        self.site.register_plugin(templates_plugin)
+        self.site.add_plugin(templates_plugin)
 
     def test_undefined(self):
         try:

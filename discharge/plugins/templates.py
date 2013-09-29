@@ -4,6 +4,7 @@ from .plugin import Plugin
 
 
 class TemplatesPlugin(Plugin):
+    roles = 'handler',
 
     def can_handle_file(self, site, path):
         return path.endswith('.html')

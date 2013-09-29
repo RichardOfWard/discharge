@@ -1,10 +1,13 @@
 class Plugin(object):
-    def can_handle_file(self, site, path):
-        return False
+    roles = ()
 
-    def build_file(self, site, path):
-        raise NotImplementedError(
-            "%s.build_file not implemented" % self.__class__.__name__)
+    def __init__(self):
+        site = None
 
-    def build_misc(self, site):
-        pass
+    def add_to_site(self, site):
+        self.site = site
+        for role in self.roles:
+            self.register_role(role)
+
+    def register_role(self, role):
+        self.site.register_role(self, role)

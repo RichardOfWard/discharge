@@ -14,9 +14,32 @@ class Site(object):
         self.build_path = build_path
         self.base_path = base_path
         self.plugins = []
+        self.plugins_by_role = {}
 
-    def register_plugin(self, plugin):
+    def add_plugin(self, plugin):
+        if plugin in self.plugins:
+            raise ValueError("Plugin already registered")
         self.plugins.append(plugin)
+        plugin.add_to_site(self)
+
+    def register_role(self, plugin, role):
+        role_plugins = self.plugins_by_role.get(role, [])
+        if plugin in role_plugins:
+            raise ValueError("Plugin already registered for role %s" % role)
+        role_plugins.append(plugin)
+        self.plugins_by_role[role] = role_plugins
+
+    def get_plugin_by_role(self, role):
+        plugins = self.plugins_by_role.get(role, [])
+        if len(plugins) == 0:
+            raise ValueError("No plugin for role %s" % role)
+        elif len(plugins) > 1:
+            raise ValueError("Multiple plugins for role %s" % role)
+        else:
+            return list(plugins)[0]
+
+    def get_plugins_by_role(self, role):
+        return list(self.plugins_by_role.get(role, []))
 
     def input_file(self, path, mode='rb', buffering=-1):
         path = os.path.join(self.source_path, path)
@@ -57,7 +80,8 @@ class Site(object):
             for filename in filenames:
                 file_path = os.path.join(dirpath, filename)
 
-                handlers = [plugin for plugin in self.plugins
+                handlers = self.get_plugins_by_role('handler')
+                handlers = [plugin for plugin in handlers
                             if plugin.can_handle_file(self, file_path)]
 
                 if len(handlers) > 1:
@@ -72,5 +96,5 @@ class Site(object):
                         with self.output_file(file_path) as dst:
                             shutil.copyfileobj(src, dst)
 
-        for plugin in self.plugins:
-            plugin.build_misc(self)
+        for plugin in self.get_plugins_by_role('producer'):
+            plugin.produce(self)

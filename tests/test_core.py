@@ -7,11 +7,6 @@ from discharge.plugins.plugin import Plugin
 from .base import Test
 
 
-class EagerPlugin(Plugin):
-    def can_handle_file(self, site, path):
-        return True
-
-
 class TestCoreCopying(Test):
 
     source_dir = 'test_core'
@@ -81,13 +76,86 @@ class TestCore(Test):
         else:
             assert False
 
+
+class EagerPlugin(Plugin):
+    roles = 'handler',
+
+    def can_handle_file(self, site, path):
+        return True
+
+
+class TestPlugins(Test):
+
+    source_dir = 'test_core'
+
     def test_plugins(self):
-        self.site.register_plugin(Plugin())
+        self.site.add_plugin(Plugin())
         self.site.build()
 
-    def test_duplicate_handlers(self):
-        self.site.register_plugin(EagerPlugin())
-        self.site.register_plugin(EagerPlugin())
+    def test_duplicate_plugins(self):
+        plugin = Plugin()
+        self.site.add_plugin(plugin)
+        try:
+            self.site.add_plugin(plugin)
+        except ValueError:
+            pass
+        except:
+            assert False
+
+    def test_plugin_role_names_unique(self):
+        p1 = EagerPlugin()
+        p2 = EagerPlugin()
+        p1.roles += tuple('asdf')
+        assert p1.roles is not p2.roles
+
+    def test_plugin_role(self):
+        plugin = EagerPlugin()
+        self.site.add_plugin(plugin)
+        assert self.site.get_plugin_by_role('handler') is plugin
+
+    def test_missing_plugin(self):
+        self.site.add_plugin(EagerPlugin())
+        try:
+            self.site.get_plugin_by_role('no-such-role')
+        except ValueError:
+            pass
+        else:
+            assert False
+
+    def test_duplicate_roles(self):
+        self.site.add_plugin(EagerPlugin())
+        self.site.add_plugin(EagerPlugin())
+        try:
+            self.site.get_plugin_by_role('handler')
+        except ValueError:
+            pass
+        else:
+            assert False
+
+    def test_multiple_roles(self):
+        self.site.add_plugin(EagerPlugin())
+        self.site.add_plugin(EagerPlugin())
+        plugins = self.site.get_plugins_by_role('handler')
+        assert len(plugins) == 2
+
+    def test_missing_roles(self):
+        self.site.add_plugin(EagerPlugin())
+        self.site.add_plugin(EagerPlugin())
+        plugins = self.site.get_plugins_by_role('no-such-role')
+        print self.site.plugins_by_role
+        assert len(plugins) == 0
+
+    def test_modify_roles(self):
+        self.site.add_plugin(EagerPlugin())
+        roles = self.site.get_plugins_by_role('handler')
+        assert len(roles) == 1
+        roles.append('test')
+        roles = self.site.get_plugins_by_role('handler')
+        assert len(roles) == 1
+
+    def test_duplicate_file(self):
+        self.site.add_plugin(EagerPlugin())
+        self.site.add_plugin(EagerPlugin())
         try:
             self.site.build()
         except DuplicateHandlers:

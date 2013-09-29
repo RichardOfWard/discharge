@@ -8,7 +8,7 @@ class TestRobotsWithout(Test):
 
     def test_robots_file(self):
         robots_plugin = RobotsPlugin()
-        self.site.register_plugin(robots_plugin)
+        self.site.add_plugin(robots_plugin)
         self.site.build()
         with open(self.build_path + '/robots.txt') as f:
             assert f.read() == "User-agent: *"
@@ -20,7 +20,7 @@ class TestRobotsWith(Test):
 
     def test_robots_file(self):
         robots_plugin = RobotsPlugin()
-        self.site.register_plugin(robots_plugin)
+        self.site.add_plugin(robots_plugin)
         self.site.build()
         with open(self.build_path + '/robots.txt') as f1:
             with open(self.source_path + '/robots.txt') as f2:

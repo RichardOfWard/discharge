@@ -3,7 +3,9 @@ from ..exceptions import FileExists
 
 
 class RobotsPlugin(Plugin):
-    def build_misc(self, site):
+    roles = 'producer',
+
+    def produce(self, site):
         try:
             with site.output_file('robots.txt', 'wb') as f:
                 f.write("User-agent: *")
