@@ -82,7 +82,7 @@ class Site(object):
 
                 handlers = self.get_plugins_by_role('handler')
                 handlers = [plugin for plugin in handlers
-                            if plugin.can_handle_file(self, file_path)]
+                            if plugin.can_handle_file(file_path)]
 
                 if len(handlers) > 1:
                     raise DuplicateHandlers(
@@ -90,11 +90,11 @@ class Site(object):
                             file_path,
                             repr(handlers)))
                 elif len(handlers) == 1:
-                    handlers[0].build_file(self, file_path)
+                    handlers[0].build_file(file_path)
                 else:
                     with self.input_file(file_path) as src:
                         with self.output_file(file_path) as dst:
                             shutil.copyfileobj(src, dst)
 
         for plugin in self.get_plugins_by_role('producer'):
-            plugin.produce(self)
+            plugin.produce()

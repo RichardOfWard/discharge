@@ -6,11 +6,11 @@ from .plugin import Plugin
 class TemplatesPlugin(Plugin):
     roles = 'handler',
 
-    def can_handle_file(self, site, path):
+    def can_handle_file(self, path):
         return path.endswith('.html')
 
-    def build_file(self, site, path):
-        loader = jinja2.FileSystemLoader(site.source_path)
+    def build_file(self, path):
+        loader = jinja2.FileSystemLoader(self.site.source_path)
         env = jinja2.Environment(
             loader=loader,
             autoescape=True,
@@ -21,13 +21,13 @@ class TemplatesPlugin(Plugin):
             ],
         )
         template = env.get_template(path)
-        with site.output_file(path) as f:
+        with self.site.output_file(path) as f:
             f.write(
                 template.render(
                     file_path='/' + path,
-                    base_path=site.base_path,
+                    base_path=self.site.base_path,
                 )
             )
 
-    def build_misc(self, site):
+    def build_misc(self):
         pass

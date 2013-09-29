@@ -80,7 +80,7 @@ class TestCore(Test):
 class EagerPlugin(Plugin):
     roles = 'handler',
 
-    def can_handle_file(self, site, path):
+    def can_handle_file(self, path):
         return True
 
 
