@@ -17,9 +17,13 @@ class TestMarkdownPlugin(Test):
         self.site.build()
 
     def test_markdown_file(self):
-        with open(self.build_path + '/test1.html') as f:
-            assert f.read().strip() == '/test1.html: <h1>HI!</h1>'
+        with open(self.build_path + '/test_markdown.html') as f:
+            assert f.read().strip() == '/test_markdown.html: <h1>HI!</h1>'
 
     def test_mdown_file(self):
-        with open(self.build_path + '/test2.html') as f:
-            assert f.read().strip() == '/test2.html: <h1>HI!</h1>'
+        with open(self.build_path + '/test_mdown.html') as f:
+            assert f.read().strip() == '/test_mdown.html: <h1>HI!</h1>'
+
+    def test_markdown_file(self):
+        with open(self.build_path + '/test_title.html') as f:
+            assert f.read().strip() == 'title /test_title.html: <h1>HI!</h1>'

@@ -38,6 +38,10 @@ class Jinja2TemplatesPlugin(Plugin):
         template = self.env.get_template(template_name)
         return template.render(**context)
 
-    def page_from_content(self, path, content):
+    def page_from_content(self, path, content, **kwargs):
         return self.render_template(
-            '_page.html', path, content=content)
+            '_page.html',
+            path,
+            content=content,
+            **kwargs
+        )
