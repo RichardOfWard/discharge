@@ -4,7 +4,7 @@ from .plugin import Plugin
 
 
 class Jinja2TemplatesPlugin(Plugin):
-    roles = 'handler',
+    roles = 'handler', 'page_from_content',
 
     def can_handle_file(self, path):
         return path.endswith('.html')
@@ -23,14 +23,21 @@ class Jinja2TemplatesPlugin(Plugin):
         )
 
     def build_file(self, path):
-        template = self.env.get_template(path)
         with self.site.output_file(path) as f:
-            f.write(
-                template.render(
-                    file_path='/' + path,
-                    base_path=self.site.base_path,
-                )
-            )
+            f.write(self.render_template(path, path).encode('utf-8'))
 
     def build_misc(self):
         pass
+
+    def render_template(self, template_name, path, **kwargs):
+        context = {
+            'file_path': '/' + path.lstrip('/'),
+            'base_path': self.site.base_path,
+        }
+        context.update(kwargs)
+        template = self.env.get_template(template_name)
+        return template.render(**context)
+
+    def page_from_content(self, path, content):
+        return self.render_template(
+            '_page.html', path, content=content)
