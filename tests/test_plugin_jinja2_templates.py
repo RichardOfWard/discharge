@@ -1,6 +1,6 @@
 from jinja2.exceptions import UndefinedError
 
-from discharge.plugins.templates import TemplatesPlugin
+from discharge.plugins.jinja2_templates import Jinja2TemplatesPlugin
 from discharge.site import Site
 
 from .base import Test
@@ -8,11 +8,11 @@ from .base import Test
 
 class TestTemplatesPlugin(Test):
 
-    source_dir = 'test_plugin_templates'
+    source_dir = 'test_plugin_jinja2_templates'
 
     def setup(self):
         super(TestTemplatesPlugin, self).setup()
-        templates_plugin = TemplatesPlugin()
+        templates_plugin = Jinja2TemplatesPlugin()
         self.site.add_plugin(templates_plugin)
         self.site.build()
 
@@ -47,12 +47,12 @@ class TestTemplatesPlugin(Test):
 
 class TestTemplatesPluginBasePath(Test):
 
-    source_dir = 'test_plugin_templates'
+    source_dir = 'test_plugin_jinja2_templates'
 
     def setup(self):
         super(TestTemplatesPluginBasePath, self).setup()
         self.site = Site(self.source_path, self.build_path, '/foo')
-        templates_plugin = TemplatesPlugin()
+        templates_plugin = Jinja2TemplatesPlugin()
         self.site.add_plugin(templates_plugin)
         self.site.build()
 
@@ -63,12 +63,12 @@ class TestTemplatesPluginBasePath(Test):
 
 class TestTemplatesPluginUndefined(Test):
 
-    source_dir = 'test_plugin_templates_undefined'
+    source_dir = 'test_plugin_jinja2_templates_undefined'
 
     def setup(self):
         super(TestTemplatesPluginUndefined, self).setup()
         self.site = Site(self.source_path, self.build_path, '/foo')
-        templates_plugin = TemplatesPlugin()
+        templates_plugin = Jinja2TemplatesPlugin()
         self.site.add_plugin(templates_plugin)
 
     def test_undefined(self):
