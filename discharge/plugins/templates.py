@@ -9,10 +9,11 @@ class TemplatesPlugin(Plugin):
     def can_handle_file(self, path):
         return path.endswith('.html')
 
-    def build_file(self, path):
-        loader = jinja2.FileSystemLoader(self.site.source_path)
-        env = jinja2.Environment(
-            loader=loader,
+    def add_to_site(self, site):
+        super(TemplatesPlugin, self).add_to_site(site)
+        self.loader = jinja2.FileSystemLoader(self.site.source_path)
+        self.env = jinja2.Environment(
+            loader=self.loader,
             autoescape=True,
             undefined=jinja2.StrictUndefined,
             extensions=[
@@ -20,7 +21,9 @@ class TemplatesPlugin(Plugin):
                 'jinja2_highlight.HighlightExtension',
             ],
         )
-        template = env.get_template(path)
+
+    def build_file(self, path):
+        template = self.env.get_template(path)
         with self.site.output_file(path) as f:
             f.write(
                 template.render(
