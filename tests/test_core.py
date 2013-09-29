@@ -23,6 +23,14 @@ class TestCoreCopying(Test):
             with open(self.build_path + '/testfile') as f2:
                 assert f1.read() == f2.read()
 
+    def test_build_clean(self):
+        self.site.clean()
+        assert not os.path.exists(self.build_path + '/testfile')
+
+    def test_clean_before_build(self):
+        self.site.build()
+        self.site.build()
+
     def test_copied_subdir(self):
         with open(self.source_path + '/testdir/testfile') as f1:
             with open(self.build_path + '/testdir/testfile') as f2:

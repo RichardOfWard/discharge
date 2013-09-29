@@ -51,9 +51,15 @@ class Site(object):
             raise FileExists("File %s already exists" % path)
         return open(path, mode, buffering)
 
+    def clean(self):
+        if os.path.exists(self.build_path):
+            shutil.rmtree(self.build_path)
+
     def build(self):
         assert os.path.isdir(self.source_path), \
             "Site not found at %s" % self.source_path
+
+        self.clean()
 
         walker = os.walk(self.source_path)
         for dirpath, dirnames, filenames in walker:
