@@ -26,9 +26,6 @@ class Jinja2TemplatesPlugin(Plugin):
         with self.site.output_file(path) as f:
             f.write(self.render_template(path, path).encode('utf-8'))
 
-    def build_misc(self):
-        pass
-
     def render_template(self, template_name, path, **kwargs):
         context = {
             'file_path': '/' + path.lstrip('/'),

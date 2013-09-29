@@ -130,6 +130,16 @@ class TestPlugins(Test):
         else:
             assert False
 
+    def test_duplicate_role_registration(self):
+        ep = EagerPlugin()
+        ep.roles = 'handler', 'handler'
+        try:
+            self.site.add_plugin(ep)
+        except ValueError:
+            pass
+        else:
+            assert False
+
     def test_duplicate_roles(self):
         self.site.add_plugin(EagerPlugin())
         self.site.add_plugin(EagerPlugin())
