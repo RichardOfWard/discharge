@@ -6,6 +6,7 @@ setup(
     version=discharge.version,
     author='Richard Ward',
     author_email='richard@richard.ward.name',
+    url='https://github.com/RichardOfWard/discharge',
     description='A static site generator',
     long_description=open('README.rst').read(),
     packages=find_packages(exclude=['tests']),
