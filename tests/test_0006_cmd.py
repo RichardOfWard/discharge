@@ -40,24 +40,28 @@ class TestCmd(object):
                              cwd=self.source_path,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
-
         pt = ProcessThread(p)
         pt.start()
-
         time.sleep(1)
 
         try:
-            response = urllib2.urlopen(
-                'http://127.0.0.1:8000/testfile.html')
-        except:
+            urllib2.urlopen('http://127.0.0.1:8000/testfile.html')
+        except Exception as e:
             if p.returncode is None:
-                p.kill()
+                try:
+                    urllib2.urlopen('http://127.0.0.1:8000/!SHUTDOWN!')
+                except:
+                    pass
             pt.join()
-            print pt.out, pt.err
-            raise
+            print pt.out
+            print pt.err
+            raise e
         else:
             if p.returncode is None:
-                p.kill()
+                try:
+                    urllib2.urlopen('http://127.0.0.1:8000/!SHUTDOWN!')
+                except:
+                    pass
             pt.join()
 
 

@@ -27,7 +27,7 @@ class TestServer(Test):
         server.start()
         try:
             request = urlopen('http://localhost:8000/testfile.html')
-            request.read()
+            assert request.read().strip() == 'testfile.html'
         finally:
             server.shutdown()
 
@@ -37,7 +37,7 @@ class TestServer(Test):
         server.start()
         try:
             request = urlopen('http://localhost:8000/testdir/')
-            request.read()
+            assert request.read().strip() == 'testdir/index.html'
         finally:
             server.shutdown()
 

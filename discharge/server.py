@@ -5,6 +5,8 @@ from threading import Thread
 from werkzeug.wrappers import Request
 from werkzeug.exceptions import NotFound
 from werkzeug.serving import run_simple, WSGIRequestHandler
+from werkzeug.wsgi import get_path_info, wrap_file
+import mimetypes
 
 
 class CustomRequestHandler(WSGIRequestHandler):
@@ -18,6 +20,41 @@ class CustomRequestHandler(WSGIRequestHandler):
         else:
             self.server.shutdown()
             self.server.socket.close()
+
+
+class StaticFilesMiddleWare():
+    def __init__(self, application, context):
+        self.application = application
+        self.context = context
+
+    def __call__(self, environ, start_response):
+        cleaned_path = get_path_info(environ)
+        cleaned_path = cleaned_path.lstrip('/')
+        cleaned_path = '/' + cleaned_path
+        static_file_path = None
+        if cleaned_path.lstrip('/') in self.context.output_files:
+            static_file_path = cleaned_path
+        elif cleaned_path.endswith('/'):
+            try_cleaned_path = cleaned_path + 'index.html'
+            if try_cleaned_path.lstrip('/') in self.context.output_files:
+                static_file_path = try_cleaned_path
+
+        if static_file_path is None:
+            return self.application(environ, start_response)
+
+        real_path = os.path.join(self.context.site.build_path,
+                                 static_file_path.lstrip('/'))
+
+        guessed_type = mimetypes.guess_type(real_path)
+        mime_type = guessed_type[0] or 'text/plain'
+        file_size = int(os.path.getsize(real_path))
+
+        headers = [
+            ('Content-Type', mime_type),
+            ('Content-Length', str(file_size)),
+        ]
+        start_response('200 OK', headers)
+        return wrap_file(environ, open(real_path, 'rb'))
 
 
 class Server(Thread):
@@ -37,13 +74,21 @@ class Server(Thread):
 
     def run(self):
         context = self.site.build()
+
+        application = StaticFilesMiddleWare(self.application, context)
+
+        extra_files = []
+        for input_file in context.input_files:
+            extra_files.append(os.path.join(
+                self.site.source_path, input_file))
+
         run_simple(
-            self.host, self.port, self.application,
+            self.host, self.port, application,
             request_handler=CustomRequestHandler,
             threaded=True,
-            static_files={'/': self.site.build_path},
             use_reloader=self.use_reloader,
-            extra_files=context.input_files,
+            extra_files=extra_files,
+            use_debugger=True,
         )
 
     def start(self, *args, **kwargs):
@@ -51,7 +96,7 @@ class Server(Thread):
         # TODO: this is NOT a clean solution!
         # would be better to get run_simple emit a signal
         # when the socket is bound, which we can wait for here
-        time.sleep(0.01)
+        time.sleep(0.1)
         return ret
 
     def shutdown(self):

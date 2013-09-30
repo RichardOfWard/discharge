@@ -66,10 +66,7 @@ class TestCoreCopying(Test):
 
     def test_file_list(self):
         input_files = self.site.build().input_files
-        assert input_files == set([
-            self.source_path + '/testdir/testfile',
-            self.source_path + '/testfile',
-        ])
+        assert input_files == set(['testdir/testfile','testfile',])
 
 
 class TestCore(Test):
