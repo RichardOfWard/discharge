@@ -166,7 +166,6 @@ class TestPlugins(Test):
         self.site.add_plugin(EagerPlugin())
         self.site.add_plugin(EagerPlugin())
         plugins = self.site.get_plugins_by_role('no-such-role')
-        print self.site.plugins_by_role
         assert len(plugins) == 0
 
     def test_modify_roles(self):

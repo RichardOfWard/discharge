@@ -30,7 +30,7 @@ class TestCmd(object):
         out, err = p.communicate()
 
         if p.returncode != 0:
-            print out, err
+            print(out, err)
             assert False, "discharge build failed"
 
         assert os.path.exists(self.source_path + '/testfile.html')
@@ -53,8 +53,8 @@ class TestCmd(object):
                 except:
                     pass
             pt.join()
-            print pt.out
-            print pt.err
+            print(pt.out)
+            print(pt.err)
             raise e
         else:
             if p.returncode is None:
