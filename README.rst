@@ -34,6 +34,7 @@ Create a file in your source directory called `_discharge.py` (files
 starting with a `_` or a `.` are ignored by discharge):
 
 .. code:: python
+
     import os
     
     from discharge.site import Site
