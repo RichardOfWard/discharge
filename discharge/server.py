@@ -23,11 +23,12 @@ class CustomRequestHandler(WSGIRequestHandler):
 class Server(Thread):
     shutdown_flag = False
 
-    def __init__(self, site, host='localhost', port=8000):
+    def __init__(self, site, host='localhost', port=8000, use_reloader=False):
         super(Server, self).__init__()
         self.site = site
         self.host = host
         self.port = port
+        self.use_reloader = use_reloader
 
     @Request.application
     def application(self, request):
@@ -36,12 +37,14 @@ class Server(Thread):
         return NotFound()
 
     def run(self):
-        print {'/': self.site.build_path},
+        context = self.site.build()
         run_simple(
             self.host, self.port, self.application,
             request_handler=CustomRequestHandler,
             threaded=True,
             static_files={'/': self.site.build_path},
+            use_reloader=self.use_reloader,
+            extra_files=context.input_files,
         )
 
     def start(self, *args, **kwargs):

@@ -14,7 +14,7 @@ def do_cmd():
         elif len(sys.argv) == 2 and sys.argv[1] == 'serve':
             site = load_site_config()
             from discharge.server import Server
-            Server(site).start()
+            Server(site, use_reloader=True).run()
         else:
             raise UsageError()
     except UsageError:
