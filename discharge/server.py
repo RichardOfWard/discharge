@@ -23,11 +23,20 @@ class CustomRequestHandler(WSGIRequestHandler):
 
 
 class StaticFilesMiddleWare():
-    def __init__(self, application, context):
+    def __init__(self, application, site):
         self.application = application
-        self.context = context
+        self.site = site
+        self.context = None
+        self.extra_files = []
 
     def __call__(self, environ, start_response):
+        if self.context is None:
+            self.context = self.site.build()
+
+            for input_file in self.context.input_files:
+                self.extra_files.append(
+                    os.path.join(self.site.source_path, input_file))
+
         cleaned_path = get_path_info(environ)
         cleaned_path = cleaned_path.lstrip('/')
         cleaned_path = '/' + cleaned_path
@@ -73,14 +82,8 @@ class Server(Thread):
         return NotFound()
 
     def run(self):
-        context = self.site.build()
-
-        application = StaticFilesMiddleWare(self.application, context)
-
-        extra_files = []
-        for input_file in context.input_files:
-            extra_files.append(os.path.join(
-                self.site.source_path, input_file))
+        application = StaticFilesMiddleWare(self.application, self.site)
+        extra_files = application.extra_files
 
         run_simple(
             self.host, self.port, application,
