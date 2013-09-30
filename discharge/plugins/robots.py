@@ -5,9 +5,9 @@ from ..exceptions import FileExists
 class RobotsPlugin(Plugin):
     roles = 'producer',
 
-    def produce(self):
+    def produce(self, context):
         try:
-            with self.site.output_file('robots.txt', 'wb') as f:
+            with context.output_file('robots.txt', 'wb') as f:
                 f.write("User-agent: *")
         except FileExists:
             pass

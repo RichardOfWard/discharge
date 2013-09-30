@@ -3,6 +3,7 @@ import os
 from discharge.site import Site
 from discharge.exceptions import FileExists, DuplicateHandlers
 from discharge.plugins.plugin import Plugin
+from discharge.buildcontext import BuildContext
 
 from .base import Test
 
@@ -63,6 +64,13 @@ class TestCoreCopying(Test):
         assert os.path.exists(self.source_path + '/emptydir/.hiddenfile')
         assert not os.path.exists(self.build_path + '/emptydir/.hiddenfile')
 
+    def test_file_list(self):
+        input_files = self.site.build().input_files
+        assert input_files == set([
+            self.source_path + '/testdir/testfile',
+            self.source_path + '/testfile',
+        ])
+
 
 class TestCore(Test):
 
@@ -74,10 +82,11 @@ class TestCore(Test):
 
     def test_output_file_checking(self):
         os.mkdir(self.build_path)
-        with self.site.output_file('test'):
+        context = BuildContext(self.site)
+        with context.output_file('test'):
             pass
         try:
-            with self.site.output_file('test'):
+            with context.output_file('test'):
                 pass
         except FileExists:
             pass

@@ -22,9 +22,10 @@ class Jinja2TemplatesPlugin(Plugin):
             ],
         )
 
-    def build_file(self, path):
-        with self.site.output_file(path) as f:
-            f.write(self.render_template(path, path).encode('utf-8'))
+    def build_file(self, path, context):
+        with context.input_file(path):
+            with context.output_file(path) as f:
+                f.write(self.render_template(path, path).encode('utf-8'))
 
     def render_template(self, template_name, path, **kwargs):
         context = {

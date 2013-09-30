@@ -1,7 +1,8 @@
 import os
 import shutil
 
-from .exceptions import FileExists, DuplicateHandlers
+from .exceptions import DuplicateHandlers
+from .buildcontext import BuildContext
 
 
 class Site(object):
@@ -41,16 +42,6 @@ class Site(object):
     def get_plugins_by_role(self, role):
         return list(self.plugins_by_role.get(role, []))
 
-    def input_file(self, path, mode='rb', buffering=-1):
-        path = os.path.join(self.source_path, path)
-        return open(path, mode, buffering)
-
-    def output_file(self, path, mode='wb', buffering=-1):
-        path = os.path.join(self.build_path, path)
-        if os.path.exists(path):
-            raise FileExists("File %s already exists" % path)
-        return open(path, mode, buffering)
-
     def clean(self):
         if os.path.exists(self.build_path):
             shutil.rmtree(self.build_path)
@@ -60,6 +51,8 @@ class Site(object):
             "Site not found at %s" % self.source_path
 
         self.clean()
+
+        context = BuildContext(self)
 
         walker = os.walk(self.source_path)
         for dirpath, dirnames, filenames in walker:
@@ -96,11 +89,13 @@ class Site(object):
                             file_path,
                             repr(handlers)))
                 elif len(handlers) == 1:
-                    handlers[0].build_file(file_path)
+                    handlers[0].build_file(file_path, context)
                 else:
-                    with self.input_file(file_path) as src:
-                        with self.output_file(file_path) as dst:
+                    with context.input_file(file_path) as src:
+                        with context.output_file(file_path) as dst:
                             shutil.copyfileobj(src, dst)
 
         for plugin in self.get_plugins_by_role('producer'):
-            plugin.produce()
+            plugin.produce(context)
+
+        return context
