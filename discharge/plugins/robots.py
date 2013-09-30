@@ -8,6 +8,6 @@ class RobotsPlugin(Plugin):
     def produce(self, context):
         try:
             with context.output_file('robots.txt', 'wb') as f:
-                f.write("User-agent: *")
+                f.write("User-agent: *".encode("utf-8"))
         except FileExists:
             pass
