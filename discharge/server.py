@@ -21,7 +21,6 @@ class CustomRequestHandler(WSGIRequestHandler):
 
 
 class Server(Thread):
-    shutdown_flag = False
 
     def __init__(self, site, host='localhost', port=8000, use_reloader=False):
         super(Server, self).__init__()
@@ -32,7 +31,7 @@ class Server(Thread):
 
     @Request.application
     def application(self, request):
-        if self.shutdown_flag:
+        if request.path == '/!SHUTDOWN!':
             request.environ['werkzeug.server.shutdown']()
         return NotFound()
 
@@ -56,7 +55,6 @@ class Server(Thread):
         return ret
 
     def shutdown(self):
-        self.shutdown_flag = True
         if self.is_alive():
             try:
                 urlopen('http://%s:%s/!SHUTDOWN!' % (self.host, self.port))
