@@ -13,6 +13,7 @@ setup(
         'Jinja2',
         'jinja2-highlight',
         'Markdown',
+        'Werkzeug',
     ],
     tests_require=['nose'],
     test_suite='nose.collector',
