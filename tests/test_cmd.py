@@ -34,3 +34,37 @@ class TestCmd(object):
             assert False, "discharge build failed"
 
         assert os.path.exists(self.source_path + '/testfile.html')
+
+    def test_serve(self):
+        p = subprocess.Popen(['discharge', 'serve'],
+                             cwd=self.source_path,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+
+        pt = ProcessThread(p)
+        pt.start()
+
+        time.sleep(1)
+
+        try:
+            response = urllib2.urlopen(
+                'http://127.0.0.1:8000/testfile.html')
+        except:
+            if p.returncode is None:
+                p.kill()
+            pt.join()
+            print pt.out, pt.err
+            raise
+        else:
+            if p.returncode is None:
+                p.kill()
+            pt.join()
+
+
+class ProcessThread(threading.Thread):
+    def __init__(self, p):
+        super(ProcessThread, self).__init__()
+        self.p = p
+
+    def run(self):
+        self.out, self.err = self.p.communicate()

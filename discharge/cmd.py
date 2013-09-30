@@ -11,13 +11,16 @@ def do_cmd():
         elif len(sys.argv) == 2 and sys.argv[1] == 'build':
             site = load_site_config()
             site.build()
+        elif len(sys.argv) == 2 and sys.argv[1] == 'serve':
+            site = load_site_config()
+            from discharge.server import Server
+            Server(site).start()
         else:
             raise UsageError()
     except UsageError:
         print "Usage:"
         print "discharge [command]"
-        print "where command is one of:"
-        print "    build"
+        print "where command is one of: build, serve"
         sys.exit(1)
 
 
