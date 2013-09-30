@@ -10,41 +10,41 @@ class TestServer(Test):
 
     def test_server_launch(self):
         server = Server(self.site)
-        server.start()
-        server.shutdown()
+        server.start(wait=True)
+        server.shutdown(wait=True)
 
     def test_server_socket_shutdown(self):
         server = Server(self.site)
-        server.start()
-        server.shutdown()
+        server.start(wait=True)
+        server.shutdown(wait=True)
         server = Server(self.site)
-        server.start()
-        server.shutdown()
+        server.start(wait=True)
+        server.shutdown(wait=True)
 
     def test_server(self):
         self.site.build()
         server = Server(self.site)
-        server.start()
+        server.start(wait=True)
         try:
             request = urlopen('http://localhost:8000/testfile.html')
             assert request.read().strip() == 'testfile.html'
         finally:
-            server.shutdown()
+            server.shutdown(wait=True)
 
     def test_index(self):
         self.site.build()
         server = Server(self.site)
-        server.start()
+        server.start(wait=True)
         try:
             request = urlopen('http://localhost:8000/testdir/')
             assert request.read().strip() == 'testdir/index.html'
         finally:
-            server.shutdown()
+            server.shutdown(wait=True)
 
     def test_non_index(self):
         self.site.build()
         server = Server(self.site)
-        server.start()
+        server.start(wait=True)
         try:
             request = urlopen('http://localhost:8000/')
             request.read()
@@ -53,4 +53,4 @@ class TestServer(Test):
         else:
             assert False, "This request should be 404"
         finally:
-            server.shutdown()
+            server.shutdown(wait=True)

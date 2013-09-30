@@ -96,16 +96,49 @@ class Server(Thread):
 
     def start(self, *args, **kwargs):
         ret = super(Server, self).start()
-        # TODO: this is NOT a clean solution!
-        # would be better to get run_simple emit a signal
-        # when the socket is bound, which we can wait for here
-        time.sleep(0.1)
+        wait = kwargs.pop('wait', False)
+        if wait:
+            self.wait_for_start()
         return ret
 
-    def shutdown(self):
+    def shutdown(self, wait=False):
         if self.is_alive():
             try:
                 urlopen('http://%s:%s/!SHUTDOWN!' % (self.host, self.port))
             except HTTPError:
                 pass
+        if wait:
+            self.wait_for_shutdown()
         self.join()
+
+    def wait_for_start(self):
+        tries = 500
+        print "waiting..."
+        while tries:
+            try:
+                urlopen('http://%s:%s/!PING!' % (self.host, self.port))
+            except HTTPError:
+                break
+            except:
+                pass
+            tries -= 1
+            time.sleep(0.01)
+
+        if  not tries:
+            raise Exception("Could not start server")
+
+    def wait_for_shutdown(self):
+        print "waiting..."
+        tries = 500
+        while tries:
+            try:
+                urlopen('http://%s:%s/!PING!' % (self.host, self.port))
+            except HTTPError:
+                pass
+            except:
+                break
+            tries -= 1
+            time.sleep(0.01)
+
+        if not tries:
+            raise Exception("Could not stop server")
