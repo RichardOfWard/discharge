@@ -14,6 +14,7 @@ setup(
     install_requires=[
         'Jinja2',
         'Markdown',
+        'Pygments',
         'Werkzeug',
     ],
     tests_require=['nose'],
