@@ -1,10 +1,13 @@
 import jinja2
-
 from .plugin import Plugin
+from .jinja2_filters.highlight import highlight_filter
 
 
 class Jinja2TemplatesPlugin(Plugin):
     roles = 'handler', 'page_from_content',
+    extensions = ['jinja2.ext.autoescape']
+    autoescape = True
+    filters = {'highlight': highlight_filter}
 
     def can_handle_file(self, path):
         return path.endswith('.html')
@@ -14,13 +17,12 @@ class Jinja2TemplatesPlugin(Plugin):
         self.loader = jinja2.FileSystemLoader(self.site.source_path)
         self.env = jinja2.Environment(
             loader=self.loader,
-            autoescape=True,
+            autoescape=self.autoescape,
             undefined=jinja2.StrictUndefined,
-            extensions=[
-                'jinja2.ext.autoescape',
-                'jinja2_highlight.HighlightExtension',
-            ],
+            extensions=self.extensions,
         )
+        for name, func in self.filters.items():
+            self.env.filters[name] = func
 
     def build_file(self, path, context):
         with context.input_file(path):

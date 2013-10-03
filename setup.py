@@ -13,7 +13,6 @@ setup(
     scripts=['scripts/discharge'],
     install_requires=[
         'Jinja2',
-        'jinja2-highlight',
         'Markdown',
         'Werkzeug',
     ],
