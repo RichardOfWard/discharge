@@ -27,3 +27,11 @@ class TestMarkdownPlugin(Test):
     def test_markdown_file(self):
         with open(self.build_path + '/test_title.html') as f:
             assert f.read().strip() == 'title /test_title.html: <h1>HI!</h1>'
+
+    def test_pygments(self):
+        with open(self.build_path + '/test_pygments.html') as f:
+            assert f.read().strip() == (
+                '/test_pygments.html: <div class="highlight">'
+                '<pre><span class="kn">import</span> <span class="nn">'
+                'love</span>\n</pre></div>'
+            )

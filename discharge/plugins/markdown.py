@@ -6,8 +6,13 @@ from .plugin import Plugin
 
 class MarkdownPlugin(Plugin):
     roles = 'handler',
-    markdown_file_extensions = '.mdown', '.markdown'
-    markdown_extensions = 'extra', 'meta'
+    markdown_file_extensions = ['.mdown', '.markdown']
+    markdown_extensions = [
+        'extra',
+        'meta',
+        'sane_lists',
+        'codehilite(css_class=highlight)',
+    ]
 
     def can_handle_file(self, path):
         for ext in self.markdown_file_extensions:
