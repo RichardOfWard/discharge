@@ -14,7 +14,7 @@ class TestTemplatesPlugin(Test):
         super(TestTemplatesPlugin, self).setup()
         self.templates_plugin = Jinja2TemplatesPlugin()
         self.site.add_plugin(self.templates_plugin)
-        self.site.build()
+        self.build_context = self.site.build()
 
     def test_non_template(self):
         with open(self.build_path + '/test.txt') as f:
@@ -43,6 +43,9 @@ class TestTemplatesPlugin(Test):
                 """</span> <span class="nn">love</span>\n"""
                 """</pre></div>"""
             )
+
+    def test_template_logged(self):
+        assert "/test.html" in self.build_context
 
 
 class TestTemplatesPluginBasePath(Test):
