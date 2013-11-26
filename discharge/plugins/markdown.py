@@ -36,6 +36,7 @@ class MarkdownPlugin(Plugin):
                 html = page_plugin.page_from_content(
                     out_path,
                     content,
+                    context,
                     **meta
                 )
                 dst_file.write(html.encode('utf-8'))

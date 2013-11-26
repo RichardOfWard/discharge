@@ -1,3 +1,4 @@
+import os
 from jinja2.exceptions import UndefinedError
 
 from discharge.plugins.jinja2_templates import Jinja2TemplatesPlugin
@@ -46,6 +47,11 @@ class TestTemplatesPlugin(Test):
 
     def test_template_logged(self):
         assert "test.html" in self.build_context.input_files
+
+    def test_base_template_logged(self):
+        assert os.path.exists(self.build_path + "/derived.html")
+        assert not os.path.exists(self.build_path + "/_base.html")
+        assert "_base.html" in self.build_context.input_files
 
 
 class TestTemplatesPluginBasePath(Test):
